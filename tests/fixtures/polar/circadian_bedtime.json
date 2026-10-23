@@ -1,0 +1,14 @@
+[
+  {
+    "validity": "VALIDITY_ESTIMATE",
+    "quality": "CIRCADIAN_BEDTIME_QUALITY_COMPROMISED",
+    "result_type": "CIRCADIAN_BEDTIME_TYPE_HISTORY",
+    "period_start_time": "2022-11-20T21:18:30",
+    "period_end_time": "2022-11-21T05:18:30",
+    "preferred_sleep_period_start_time": "2022-11-20T21:18:30",
+    "preferred_sleep_period_end_time": "2022-11-21T05:18:30",
+    "sleep_gate_start_time": "2022-11-20T21:03:30",
+    "sleep_gate_end_time": "2022-11-20T21:33:30",
+    "sleep_timezone_offset_minutes": 120
+  }
+]

@@ -1,0 +1,4 @@
+{"polar_user":"fixture-user","recharges":[
+  {"date":"2026-10-20","heart_rate_avg":51,"heart_rate_variability_avg":46.5,"breathing_rate_avg":14.2,"ans_charge":2.7,"ans_charge_status":"future-status","hrv_samples":{"02:00":51.75,"02:05":52.25},"breathing_samples":{"02:00":13.8,"02:05":14.1},"future_metric":{"code":"vNext","value":3}},
+  {"date":"2026-10-21","hrv_samples":null}
+]}

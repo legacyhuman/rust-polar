@@ -1,0 +1,44 @@
+[
+  {
+    "start_time": "2026-10-19T08:15:30",
+    "end_time": "2026-10-19T23:59:59",
+    "active_duration": "PT3H11M",
+    "inactive_duration": "PT18H23M30S",
+    "daily_activity": 89.1,
+    "calories": 2500,
+    "active_calories": 1500,
+    "steps": 8823,
+    "inactivity_alert_count": 1,
+    "distance_from_steps": 4590.53,
+    "samples": {
+      "date": "2026-10-19",
+      "steps": {
+        "interval_ms": 0,
+        "total_steps": 8823,
+        "samples": [
+          {"steps": 0, "timestamp": "2026-10-19T00:02"},
+          {"steps": 42, "timestamp": "2026-10-19T00:07", "future-quality": "estimated"}
+        ]
+      },
+      "activity_zones": {
+        "samples": [
+          {"zone": "SEDENTARY", "timestamp": "2026-10-19T00:08:30"},
+          {"zone": "LIGHT", "timestamp": "2026-10-19T00:12:30", "future-zone-code": 71}
+        ]
+      },
+      "inactivity_stamps": [
+        {"stamp": "2026-10-19T16:04", "future-flag": true}
+      ]
+    },
+    "future-status": "new-polar-code"
+  },
+  {
+    "start_time": "2026-10-20T00:00:00",
+    "end_time": "2026-10-20T23:59:59",
+    "active_duration": "PT2H",
+    "calories": 0,
+    "steps": 0,
+    "samples": {"date": "2026-10-20", "steps": {"interval_ms": 0, "total_steps": 0, "samples": []}},
+    "provider-revision": 17
+  }
+]

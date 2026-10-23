@@ -1,0 +1,4 @@
+[
+  {"period_start_time":"2026-10-20T09:00:00","period_end_time":"2026-10-20T18:00:00","grade":3,"grade_classification":"FUTURE_GRADE","validity":true,"result_type":"alertness","hourly_data":[{"time":"2026-10-20T09:00:00","alertness":68},{"time":"2026-10-20T10:00:00","alertness":74},{"time":"2026-10-20T11:00:00","alertness":79,"classification":"future-class"}],"future_window":{"start":"local","status":"unknown"}},
+  {"period_start_time":"2026-10-21T09:00:00","grade":null,"validity":false,"result_type":"alertness"}
+]

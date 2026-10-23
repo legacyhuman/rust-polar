@@ -1,0 +1,39 @@
+# Rust build output
+/target/
+
+# Local runtime state and databases
+/data/
+*.redb
+*.redb-lock
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+*.part
+*.archive/
+*.tar
+*.tar.zst
+*.tar.gz
+*.tgz
+*.zip
+*.backup
+
+# Local secrets and credentials
+/.env
+/.env.*
+!/.env.example
+/tokens.json
+/credentials.json
+**/tokens.json
+**/credentials.json
+**/secrets.json
+**/*token*.json
+**/*credentials*.json
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

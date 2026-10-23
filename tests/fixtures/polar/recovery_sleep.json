@@ -1,0 +1,4 @@
+{"polar_user":"fixture-user","nights":[
+  {"date":"2026-10-20","sleep_start_time":"2026-10-19T23:41:00","sleep_end_time":"2026-10-20T07:13:00","sleep_score":84,"sleep_charge":72,"sleep_goal":28800,"sleep_rating":4,"total_sleep_time":26400,"light_sleep":13800,"deep_sleep":7200,"rem_sleep":5400,"sleep_cycles":4,"hypnogram":{"2026-10-20T01:02:00":"DEEP","2026-10-20T06:58:00":"FUTURE_STAGE"},"heart_rate_samples":{"2026-10-20T02:00:00":49,"2026-10-20T02:05:00":48},"future_sleep_status":"new-code"},
+  {"date":"2026-10-21","sleep_score":null,"hypnogram":{}}
+]}

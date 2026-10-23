@@ -1,0 +1,12 @@
+[
+  {
+    "date": "2023-01-01",
+    "cardio_load_status": "LOAD_STATUS_NOT_AVAILABLE",
+    "cardio_load": 0.2,
+    "strain": 0.3,
+    "tolerance": 0.4,
+    "cardio_load_ratio": 0.1,
+    "cardio_load_level": {"very_low": 0.1, "low": 0.1, "medium": 0.1, "high": 0.1, "very-high": 0.1}
+  },
+  {"date": "2023-01-02", "cardio_load_status": "FUTURE_STATUS", "strain": 0}
+]

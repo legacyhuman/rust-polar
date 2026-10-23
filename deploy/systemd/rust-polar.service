@@ -1,0 +1,38 @@
+[Unit]
+Description=Local Polar AccessLink archive
+After=local-fs.target network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/rust-polar
+StartLimitIntervalSec=10min
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=rust-polar
+Group=rust-polar
+StateDirectory=rust-polar
+StateDirectoryMode=0700
+EnvironmentFile=-/etc/rust-polar/rust-polar.env
+Environment=RUST_POLAR_DATA_DIR=/var/lib/rust-polar
+Environment=RUST_POLAR_SOCKET=/var/lib/rust-polar/run/rust-polar.sock
+ExecStart=/usr/local/bin/rust-polar serve
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=45s
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/rust-polar
+SyslogIdentifier=rust-polar
+
+[Install]
+WantedBy=multi-user.target
