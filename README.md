@@ -1,5 +1,7 @@
 # rust-polar
 
+[![CI](https://github.com/legacyhuman/rust-polar/actions/workflows/ci.yml/badge.svg)](https://github.com/legacyhuman/rust-polar/actions/workflows/ci.yml)
+
 **Polar health data, kept local.**
 
 A lightweight Rust service that collects data from the official Polar AccessLink API

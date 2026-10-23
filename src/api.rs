@@ -2170,9 +2170,10 @@ mod tests {
         sync_lock: Arc<tokio::sync::Mutex<()>>,
     ) -> TestApiServer {
         let root = std::env::temp_dir().join(format!(
-            "rp-{}-{}",
+            "rp-{}-{:x}-{:x}",
             std::process::id(),
-            time::OffsetDateTime::now_utc().unix_timestamp_nanos()
+            time::OffsetDateTime::now_utc().unix_timestamp_nanos(),
+            NEXT_TEST_STORE.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
         ));
         let socket_path = root.join("s");
         let (shutdown, receiver) = watch::channel(false);

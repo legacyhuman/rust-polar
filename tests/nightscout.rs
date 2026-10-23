@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 use std::process::Command;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use rust_polar::model::{
@@ -14,6 +15,7 @@ const FIVE_MINUTES_MICROS: i64 = 5 * 60 * 1_000_000;
 const READINGS_PER_DAY: usize = 24 * 12;
 
 struct TestDir(PathBuf);
+static NEXT_TEST_DIR: AtomicU64 = AtomicU64::new(0);
 
 impl TestDir {
     fn new() -> Self {
@@ -22,10 +24,11 @@ impl TestDir {
             .unwrap()
             .as_nanos();
         let path = std::env::temp_dir().join(format!(
-            "rust-polar-nightscout-{}-{nonce}",
-            std::process::id()
+            "rust-polar-nightscout-{}-{nonce}-{}",
+            std::process::id(),
+            NEXT_TEST_DIR.fetch_add(1, Ordering::Relaxed)
         ));
-        fs::create_dir_all(&path).unwrap();
+        fs::create_dir(&path).unwrap();
         Self(path)
     }
 }

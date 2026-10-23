@@ -7,9 +7,25 @@ Build, authorization, synchronization, exports, and maintenance.
 Requires Rust 1.90 or newer.
 
 ```sh
-cargo test --offline --all-targets
-cargo clippy --offline --all-targets -- -D warnings
+cargo fmt --all -- --check
+cargo clippy --locked --all-targets --all-features -- -D warnings
+cargo test --locked --all-targets --all-features
+cargo test --locked --doc --all-features
+RUSTDOCFLAGS="-D warnings" cargo doc --locked --no-deps --all-features
 ```
+
+GitHub Actions runs on pushes, pull requests, and manual dispatch using standard
+GitHub-hosted runners. The matrix tests Linux x86-64 on stable Rust and the minimum
+supported Rust 1.90, plus native Linux ARM64 and macOS on stable Rust. ARM64 also
+builds the release binary for Raspberry Pi. Formatting, Clippy, documentation, and
+the absence of Cyrillic text are checked separately. Actions are pinned to commit
+SHAs, use read-only repository permissions, and require no Polar credentials.
+
+The required `Quality gate` check succeeds only when every job passes. The `main`
+branch requires this check and an up-to-date base before accepting changes,
+including changes made by administrators. Develop on a branch, wait for CI, and
+then merge through a pull request or fast-forward the checked commit to `main`.
+No approval from a second person is required.
 
 The build uses RustCrypto for TLS and the Rust backend for gzip. It does not use BLE, Polar Flow private endpoints, or raw sensor streams.
 

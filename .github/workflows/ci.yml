@@ -1,0 +1,125 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: '0'
+  RUST_BACKTRACE: '1'
+
+jobs:
+  quality:
+    name: Formatting, lint, and documentation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+      - name: Cache Rust build files
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          shared-key: quality
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Reject compiler and Clippy warnings
+        run: cargo clippy --locked --all-targets --all-features -- -D warnings
+      - name: Check documentation
+        run: cargo doc --locked --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: -D warnings
+      - name: Reject Cyrillic text in tracked files
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          import re
+          import subprocess
+
+          pattern = re.compile(r'[\u0400-\u052f]')
+          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          failures = []
+          for name in filter(None, files):
+              if pattern.search(name):
+                  failures.append(f'{name}: non-English filename')
+              for line_number, line in enumerate(pathlib.Path(name).read_text(errors='replace').splitlines(), 1):
+                  if pattern.search(line):
+                      failures.append(f'{name}:{line_number}: Cyrillic text')
+          if failures:
+              raise SystemExit('\n'.join(failures))
+          PY
+
+  tests:
+    name: Tests (${{ matrix.platform }}, Rust ${{ matrix.toolchain }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: Linux x86-64
+            runner: ubuntu-24.04
+            toolchain: stable
+          - platform: Linux x86-64 MSRV
+            runner: ubuntu-24.04
+            toolchain: 1.90.0
+          - platform: Linux ARM64
+            runner: ubuntu-24.04-arm
+            toolchain: stable
+          - platform: macOS
+            runner: macos-15
+            toolchain: stable
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - name: Cache Rust build files
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+        with:
+          shared-key: tests-${{ matrix.runner }}-${{ matrix.toolchain }}
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Run unit and integration tests for all targets
+        run: cargo test --locked --all-targets --all-features
+      - name: Run documentation tests
+        run: cargo test --locked --doc --all-features
+      - name: Build Raspberry Pi release binary
+        if: matrix.runner == 'ubuntu-24.04-arm'
+        run: cargo build --release --locked --bin rust-polar
+
+  gate:
+    name: Quality gate
+    if: always()
+    needs: [quality, tests]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every check to pass
+        env:
+          QUALITY_RESULT: ${{ needs.quality.result }}
+          TEST_RESULT: ${{ needs.tests.result }}
+        run: |
+          if [ "$QUALITY_RESULT" != success ] || [ "$TEST_RESULT" != success ]; then
+            echo "Quality checks: $QUALITY_RESULT; test matrix: $TEST_RESULT"
+            exit 1
+          fi
